@@ -1,3 +1,33 @@
+# Simple Jupyterhub Deployment
+
+This is a simple jupyterhub deployment to be used on a single server to run the hub + another server to store user backups.
+
+Current features:
+* https/tls using nginx as a reverse proxy with automatic certificates throuhg Let's Encrypt
+* custom hub image
+* user disk quotas (1G soft + 2G hard)
+* periodic backups of user data to external server over simple ssh
+* authenticate through GitHub
+
+# Usage
+
+To use without backups, simply do ` docker-compose up --build`.
+
+## Configure backups
+
+For backups to work, you first need a second machine with a user `jupyter-backup` created on it.
+This user needs to be accessible with ssh, but does not need password (we will connect to it using
+ssh keys, which are more secure and easy to use):
+
+```bash
+
+```
+
+Hence, next you need to generate an ssh keypair: a privite and a public key.
+Privite key stays on the server running the hub, and public key needs to be added
+
+
+
 Backups volumes to `/data/jypyterhub/backup/restic/mnt/restic/` at the start of every hour.
 
 Restic basically works like git.
