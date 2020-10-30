@@ -1,0 +1,80 @@
+version: '3.8'
+
+services:
+  jupyterhub:
+    build: hub_image
+#    image: phaustin/newhub:step1
+    container_name: jupyterhub_basic
+    depends_on: [notebook]
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      # Need this to create user directories with proeper permissions
+      - "/data/jupyterhub/:/data/jupyterhub/"
+      - "/:/host_root/"
+    networks:
+      - jupyterhub_step1
+    environment:
+      VIRTUAL_HOST: "eoas05.eoas.ubc.ca"
+      LETSENCRYPT_HOST: "eoas05.eoas.ubc.ca"
+      VIRTUAL_PORT: "8000"
+    env_file: .env
+    privileged: true # need this to be able to set quotas
+
+  notebook:
+    image: phaustin/notebook:step1
+    build:
+      context: notebook_image
+    container_name: notebook_step1
+
+  # see https://linuxhandbook.com/nginx-reverse-proxy-docker/
+  reverse-proxy:
+    image: "jwilder/nginx-proxy:latest"
+    container_name: "reverse-proxy"
+    volumes:
+      - "/data/reverse-proxy/usr/share/nginx/html:/usr/share/nginx/html"
+      - "/data/reverse-proxy/etc/nginx/dhparam:/etc/nginx/dhparam"
+      - "/data/reverse-proxy/etc/nginx/vhost.d:/etc/nginx/vhost.d"
+      - "/data/reverse-proxy/etc/nginx/certs:/etc/nginx/certs"
+      - "/var/run/docker.sock:/tmp/docker.sock:ro"
+    networks: 
+      - jupyterhub_step1
+    ports:
+      - "80:80"
+      - "443:443"
+
+  letsencrypt:
+    image: "jrcs/letsencrypt-nginx-proxy-companion:latest"
+    container_name: "letsencrypt-helper"
+    volumes:
+      - "/data/reverse-proxy/usr/share/nginx/html:/usr/share/nginx/html"
+      - "/data/reverse-proxy/etc/nginx/dhparam:/etc/nginx/dhparam"
+      - "/data/reverse-proxy/etc/nginx/vhost.d:/etc/nginx/vhost.d"
+      - "/data/reverse-proxy/etc/nginx/certs:/etc/nginx/certs"
+      - "/run/docker.sock:/var/run/docker.sock:ro"
+    environment:
+      NGINX_PROXY_CONTAINER: "reverse-proxy"
+      DEFAULT_EMAIL: "slemonide@gmail.com"
+    depends_on:
+      - "reverse-proxy"
+    networks: 
+      - jupyterhub_step1
+
+  #restic:
+  #  image: mazzolino/restic
+  #  environment:
+  #      BACKUP_CRON: "0 0 * * * *"
+  #      RESTIC_REPOSITORY: sftp:eoas4:/home/jupyter-backup/repo #/mnt/restic
+  #      RESTIC_PASSWORD: jupyter-volumes
+  #      RESTIC_BACKUP_SOURCES: /source
+  #  volumes:
+  #      - "/data/jupyterhub/backup/jupyter/volumes/:/source/data/jupyterhub/backup/jupyter/"
+  #      - "/data/jypyterhub/backup/restic/mnt/restic/:/mnt/restic"
+  #      - "./ssh:/root/.ssh"
+
+# force the network name to be "jupyterhub"
+# this needs to be matched in jupyterhub_config.py by:
+# c.DockerSpawner.network_name = 'jupyterhub'
+networks:
+  jupyterhub_step1:
+    driver: bridge
+    name: net_basic
