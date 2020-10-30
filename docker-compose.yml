@@ -2,18 +2,17 @@ version: '3.8'
 
 services:
   jupyterhub:
-    build: "hub_image"
-#    image: phaustin/newhub:step1
+    build: "jupyterhub"
     container_name: jupyterhub_basic
     depends_on: [notebook]
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
-      # Need this to create user directories with proeper permissions
+      # Need this to create user directories
       - "/data/jupyterhub/:/data/jupyterhub/"
       - "/:/host_root/:ro"
     networks:
       - jupyterhub_step1
-    environment:
+    envi:
       VIRTUAL_HOST: "eoas05.eoas.ubc.ca"
       LETSENCRYPT_HOST: "eoas05.eoas.ubc.ca"
       VIRTUAL_PORT: "8000"
@@ -22,8 +21,7 @@ services:
 
   notebook:
     image: phaustin/notebook:step1
-    build:
-      context: notebook_image
+    build: "jupyter_notebook"
     container_name: notebook_step1
 
   # see https://linuxhandbook.com/nginx-reverse-proxy-docker/
@@ -61,7 +59,6 @@ services:
 
   restic:
     build: "restic"
-    #image: mazzolino/restic
     environment:
         BACKUP_CRON: "0 0 * * * *"
         RESTIC_REPOSITORY: sftp:eoas4:/home/jupyter-backup/repo
