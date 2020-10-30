@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   jupyterhub:
-    build: hub_image
+    build: "hub_image"
 #    image: phaustin/newhub:step1
     container_name: jupyterhub_basic
     depends_on: [notebook]
@@ -10,7 +10,7 @@ services:
       - "/var/run/docker.sock:/var/run/docker.sock"
       # Need this to create user directories with proeper permissions
       - "/data/jupyterhub/:/data/jupyterhub/"
-      - "/:/host_root/"
+      - "/:/host_root/:ro"
     networks:
       - jupyterhub_step1
     environment:
@@ -59,17 +59,17 @@ services:
     networks: 
       - jupyterhub_step1
 
-  #restic:
-  #  image: mazzolino/restic
-  #  environment:
-  #      BACKUP_CRON: "0 0 * * * *"
-  #      RESTIC_REPOSITORY: sftp:eoas4:/home/jupyter-backup/repo #/mnt/restic
-  #      RESTIC_PASSWORD: jupyter-volumes
-  #      RESTIC_BACKUP_SOURCES: /source
-  #  volumes:
-  #      - "/data/jupyterhub/backup/jupyter/volumes/:/source/data/jupyterhub/backup/jupyter/"
-  #      - "/data/jypyterhub/backup/restic/mnt/restic/:/mnt/restic"
-  #      - "./ssh:/root/.ssh"
+  restic:
+    build: "restic"
+    #image: mazzolino/restic
+    environment:
+        BACKUP_CRON: "0 0 * * * *"
+        RESTIC_REPOSITORY: sftp:eoas4:/home/jupyter-backup/repo
+        RESTIC_PASSWORD: jupyter-volumes
+        RESTIC_BACKUP_SOURCES: /source
+    volumes:
+        - "/data/jupyterhub/:/source/data/jupyterhub/:ro"
+        - "./restic/ssh/:/tmp/.ssh/:ro"
 
 # force the network name to be "jupyterhub"
 # this needs to be matched in jupyterhub_config.py by:
