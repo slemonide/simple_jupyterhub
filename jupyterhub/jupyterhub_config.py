@@ -27,7 +27,6 @@ c.LocalGitHubOAuthenticator.create_system_users = True
 # Load users from access list
 import os
 
-#c.Authenticator.allowed_users = allowed = set()
 c.Authenticator.allowed_users = allowed = set()
 c.Authenticator.admin_users = admin = set()
 c.LocalGitHubOAuthenticator.uids = uids = dict()
@@ -63,26 +62,6 @@ def pre_spawn_hook(spawner):
     user = spawner.user.name
     # 1G soft + 2G hard quota
     check_call(["setquota", "-u", user, "524288", "2097152", "0", "0", "/host_root/"])
-    #check_call(['./examples/bootstrap-script/bootstrap.sh', username])
 
 c.SystemUserSpawner.pre_spawn_hook = pre_spawn_hook
 
-#def pre_spawn_start(user, spawner):
-  # set user disk quota with soft limit of 1G and hard limit of 2G
-  # and no limit on number of files
-  # soft limit just means that user is allowed to have more than 1G for a week
-  # and after that, they wouldn't be able to write anymore unless they delete
-  # some files
-  # TODO: have some notification for that...
-  #subprocess.run(["setquota", "-u", user, "524288", "2097152", "0", "0", "/host_root/"])
-#  setquota -u slemonide 262144 524288 0 0 /host_root/
-#  print(user)
-
-  # Caveats:
-  # 524288 corresponds to 1GB (but it should to 0.5G)
-  # I think it's because we mount the same files in two different locations
-  #
-  # If user runs out of disk space, they won't be able to start their notebook next time.
-  # ... maybe that's a feature! They get automatically banned :)
-
-#c.Authenticator.pre_spawn_start = pre_spawn_start

@@ -13,8 +13,8 @@ services:
     networks:
       - jupyterhub_step1
     environment:
-      VIRTUAL_HOST: "eoas05.eoas.ubc.ca"
-      LETSENCRYPT_HOST: "eoas05.eoas.ubc.ca"
+      VIRTUAL_HOST: "${JUPYTERHUB_HOST}"
+      LETSENCRYPT_HOST: "${JUPYTERHUB_HOST}"
       VIRTUAL_PORT: "8000"
     env_file: .env
     privileged: true # need this to be able to set quotas
