@@ -20,12 +20,78 @@ This user needs to be accessible with ssh, but does not need password (we will c
 ssh keys, which are more secure and easy to use):
 
 ```bash
-
+# ssh to backup machine
+localhost> ssh backup-machine
+backup-machine> sudo adduser -q -gecos "" -disabled-password jupyter-backup
 ```
 
-Hence, next you need to generate an ssh keypair: a privite and a public key.
-Privite key stays on the server running the hub, and public key needs to be added
+Now, for more advanced security, we should only allows this user to use `sftp`, and nothing else.
+I.e. we will only use them for doing backups through `sftp` protocol that `restic` can utilize.
 
+You have to edit your sshd config on the backup machine for that:
+```bash
+backup-machine> sudo vim /etc/ssh/sshd_config
+```
+
+First, if you have `Subsystem sftp /usr/lib/openssh/sftp-server`, replace it by:
+`Subsystem sftp internal-sftp`.
+If you don't have it, just add it at the end of file. `internal-sftp` is just a newer
+version of `sftp-server` that works better with chroot.
+
+Next, we need to setup a rule sot that all users `sftponly` group can only access the server through sftp:
+```bash
+Match group sftponly
+     ChrootDirectory /home/%u
+     X11Forwarding no
+     AllowTcpForwarding no
+     ForceCommand internal-sftp
+```
+
+This creates a chroot environment (a lighter analogue of docker, haha) for the user.
+It then prevents them from using X11 forwarding, TCP forwarding, and forces them to only be able
+to use the sftp.
+
+Now restart your sshd server:
+```bash
+backup-machine> systemctl restart ssh
+```
+
+Next, we need to generate an ssh keypair to allow our restic container on jupyterhub machine to
+automatically login to backup machine through sftp and store data there.
+
+You do it on the jupyterhub machine:
+```bash
+jupyterhub-machine> cd ~/simple_jupyterhub/restic/ssh/
+jupyterhub-machine> ssh-keygen -f id_rsa -P ""
+```
+
+This generate an ssh keypair with no password protection on privite key. We don't set the
+password because we want restic to be able to connect to the backup server without prompting
+for the password.
+
+Keep privite key secure. If someone gets access to it, they can potentially remove/steal/modify
+backups from the backup server.
+
+In the directory we are currently in, there now should be two files, `id_rsa` (privite key), and
+`id_rsa.pub` (public key).
+
+Do `cat id_rsa.pub` to see its contents. We would have to copy them to the backup server for it to
+recognize our jupyterhub server when it tries to connect.
+
+Public key should look something like `ssh-rsa AAA...6p username@localhost`. Make sure you copy all
+of it.
+
+Now, add it to the backup server:
+
+```bash
+backup-machine> sudo mkdir ~jupyter-backup/.ssh
+backup-machine> sudo vim ~jupyter-backup/.ssh/authorized_keys
+```
+
+Setup proper permissons for ssh folder:
+```bash
+backup-machine> sudo chown -R jupyter-backup:jupyter-backup ~jupyter-backup/.ssh/
+```
 
 
 Backups volumes to `/data/jypyterhub/backup/restic/mnt/restic/` at the start of every hour.
