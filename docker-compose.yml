@@ -51,7 +51,7 @@ services:
       - "/run/docker.sock:/var/run/docker.sock:ro"
     environment:
       NGINX_PROXY_CONTAINER: "reverse-proxy"
-      DEFAULT_EMAIL: "slemonide@gmail.com"
+      DEFAULT_EMAIL: "${LETSENCRYPT_EMAIL}"
     depends_on:
       - "reverse-proxy"
     networks: 
