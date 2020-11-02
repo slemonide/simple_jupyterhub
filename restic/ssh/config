@@ -1,4 +1,0 @@
-Host eoas4
-Hostname eoas04.eoas.ubc.ca
-user jupyter-backup
-IdentityFile ~/.ssh/id_rsa

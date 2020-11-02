@@ -12,7 +12,7 @@ services:
       - "/:/host_root/:ro"
     networks:
       - jupyterhub_step1
-    envi:
+    environment:
       VIRTUAL_HOST: "eoas05.eoas.ubc.ca"
       LETSENCRYPT_HOST: "eoas05.eoas.ubc.ca"
       VIRTUAL_PORT: "8000"
@@ -61,12 +61,12 @@ services:
     build: "restic"
     environment:
         BACKUP_CRON: "0 0 * * * *"
-        RESTIC_REPOSITORY: sftp:eoas4:/home/jupyter-backup/repo
-        RESTIC_PASSWORD: jupyter-volumes
-        RESTIC_BACKUP_SOURCES: /source
+        RESTIC_REPOSITORY: "sftp:${BACKUP_USER}@${BACKUP_SERVER}:${BACKUP_REPO_PATH}"
+        RESTIC_BACKUP_SOURCES: "/source"
     volumes:
         - "/data/jupyterhub/:/source/data/jupyterhub/:ro"
         - "./restic/ssh/:/tmp/.ssh/:ro"
+    env_file: .env
 
 # force the network name to be "jupyterhub"
 # this needs to be matched in jupyterhub_config.py by:
