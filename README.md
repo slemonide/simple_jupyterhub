@@ -13,6 +13,10 @@ Current features:
 
 To use without backups, simply do ` docker-compose up --build`.
 
+# Disclaimer
+
+These instructions assume you are running Ubuntu. They will likely not be much different for any other GNU/Linux.
+
 ## Configure backups
 
 For backups to work, you first need a second machine with a user `jupyter-backup` created on it.
@@ -91,12 +95,57 @@ backup-machine> sudo vim ~jupyter-backup/.ssh/authorized_keys
 Setup proper permissons for ssh folder:
 ```bash
 backup-machine> sudo chown -R jupyter-backup:jupyter-backup ~jupyter-backup/.ssh/
+backup-machine> sudo chmod 600 ~jupyter-backup/.ssh/authorized_keys
+backup-machine> sudo chmod 700 ~jupyter-backup/.ssh/
 ```
 
+Note: make sure you copy the last two commands in the exact order shown since the last command
+makes `.ssh` directory unreadable by anyone except `jupyter-backup`.
 
-Backups volumes to `/data/jypyterhub/backup/restic/mnt/restic/` at the start of every hour.
+As a check, right now you should be able to ssh as `juputer-backup` from your juputerhub server:
 
-Restic basically works like git.
+```bash
+jupyterhub-machine> ssh -i id_rsa jupyter-backup@backup-machine
+```
+
+Now let's prevent that from happening:
+
+```bash
+backup-machine> sudo groupadd sftponly
+backup-machine> sudo usermod -a -G sftponly jupyter-backup
+```
+
+Notice that we didn't really have to create this group before adding it to sshd config.
+Groups and users are superficial on unix systems. They are just numers that exist.
+Whe you create a user or a group, you simply assign a name to those numbers.
+
+If you want to make it so that ssh logins work once again, do:
+```bash
+backup-machine> sudo gpasswd -d jupyter-backup sftponly
+```
+
+To test that `sftp` works, do:
+
+```bash
+jupyterhub-machine> echo "Hello, sftp!" > test
+jupyterhub-machine> sftp -i id_rsa jupyter-backup@backup-machine
+sftp> ls
+sftp> lls
+test
+sftp> put test
+Uploading test to /home/jupyter-backup/test
+test                             100%   12    52.4KB/s   00:00
+sftp> ls
+test
+sftp> lls
+```
+
+`ls` lists files on remote machine, and `lls` lists local files.
+
+It now works!
+
+
+
 
 To work with it, first get inside its container, `docker-compose exec restic bash`.
 
