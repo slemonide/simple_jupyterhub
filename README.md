@@ -13,6 +13,12 @@ Current features:
 
 To use without backups, simply do ` docker-compose up --build`. Make sure to setup `.env` file first!
 
+# Goals
+
+* setup a simple dockerized jupyterhub installation
+* share runnable/editable code in isolated environment with your collaborators
+* teach a class using runnable/editable code in isolated environments
+
 ## Disclaimer
 
 These instructions assume you are running Ubuntu. They will likely not be much different for any other GNU/Linux.
