@@ -11,11 +11,46 @@ Current features:
 
 # Usage
 
-To use without backups, simply do ` docker-compose up --build`.
+To use without backups, simply do ` docker-compose up --build`. Make sure to setup `.env` file first!
 
-# Disclaimer
+## Disclaimer
 
 These instructions assume you are running Ubuntu. They will likely not be much different for any other GNU/Linux.
+
+## Setup environment
+
+Copy `.env.dist` to `.env`, and fill in the blanks.
+To get OAUTH id and secret, follow instructions here: https://docs.github.com/en/free-pro-team@latest/developers/apps/creating-an-oauth-app
+
+* \<jupyter_address\> is something of the form `jupyterhub.example.com`
+* \<backup_server_address\> is something of the form `backup-server.example.com`
+* To generate a secure random password, you can for example, use:
+`dd if=/dev/urandom bs=1 count=32 2>/dev/null | base64 -w 0 | rev | cut -b 2- | rev`
+* Follow instructions below to properly setup backup server.
+* Email for letsencrypt doesn't really matter, I never got any :(
+
+Once you have your environment set up, everything should work fine.
+
+## Setup disk quotas
+
+To implement disk quotas, we use basic Linux filesystem disk quotas. In order for this to work, your root filesystem, and partitions where docker containers and volumes are mounted to, should be mounted with quotas on:
+```bash
+ sudo mount -o remount,usrquota,grpquota /
+```
+
+This will temporarily enable disk quotas until the next time you restart your server.
+
+To make this permanent, edit `/etc/fstab` to something like:
+
+`UUID=some-long-string-of-random-symbols / ext4 errors=remount-ro,usrquota,grpquota 0 0`
+
+or
+
+`/dev/sda1 / ext4 errors=remount-ro,usrquota,grpquota 0 0`
+
+And then restart the server using `sudo reboot`. But first make sure you didn't make any typos since then your server wouldn't be able to boot and you wouldn't be able to ssh to it!
+
+More info on disk quotas: https://linuxhint.com/disk_quota_ubuntu/
 
 ## Configure backups
 
