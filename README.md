@@ -56,6 +56,15 @@ or
 
 And then restart the server using `sudo reboot`. But first make sure you didn't make any typos since then your server wouldn't be able to boot and you wouldn't be able to ssh to it!
 
+Next, initialize and turn quotas on:
+
+```bash
+sudo quotacheck -cum /
+sudo quotaon -v /
+```
+
+First command initializes user quotas, and the second one turns quotas on for the disk mounte to `/`.
+
 More info on disk quotas: https://linuxhint.com/disk_quota_ubuntu/
 
 ## Configure backups
