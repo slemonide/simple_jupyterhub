@@ -1,5 +1,25 @@
 # launch with docker
-c.JupyterHub.spawner_class = 'dockerspawner.SystemUserSpawner'
+c.JupyterHub.spawner_class = 'cdsdashboards.hubextension.spawners.variabledocker.VariableSystemUserSpawner'
+
+# More debug info
+c.Spawner.debug = True
+
+# Allow more than one jupyter notebook environment per user
+# Needed for dashboards
+c.JupyterHub.allow_named_servers = True
+c.SystemUserSpawner.name_template = "{prefix}-{username}-{imagename}-{servername}"
+#c.JupyterHub.internal_ssl = True
+
+# Enable dashboards
+from cdsdashboards.app import CDS_TEMPLATE_PATHS
+from cdsdashboards.hubextension import cds_extra_handlers
+
+c.JupyterHub.template_paths = CDS_TEMPLATE_PATHS
+c.JupyterHub.extra_handlers = cds_extra_handlers
+
+c.CDSDashboardsConfig.builder_class = 'cdsdashboards.builder.dockerbuilder.DockerBuilder'
+
+#####
 
 # we need the hub to listen on all ips when it is in a container
 c.JupyterHub.hub_ip = '0.0.0.0'
@@ -10,9 +30,11 @@ c.JupyterHub.hub_connect_ip = 'jupyterhub_basic'
 # pick a docker image. This should have the same version of jupyterhub
 # in it as our Hub.
 #c.SystemUserSpawner.image = 'phaustin/notebook:step1'
-c.SystemUserSpawner.image = 'jupyter/datascience-notebook'
-notebook_dir = "/home/jovyan/work"
-c.SystemUserSpawner.notebook_dir = notebook_dir
+#c.SystemUserSpawner.image = 'jupyter/datascience-notebook'
+c.SystemUserSpawner.image = 'ideonate/containds-allr-datascience'
+#c.SystemUserSpawner.image = 'ideonate/containds-all-basic'
+#notebook_dir = "/home/jovyan/work"
+#c.SystemUserSpawner.notebook_dir = notebook_dir
 
 # tell the user containers to connect to our docker network
 c.SystemUserSpawner.network_name = 'net_basic'
@@ -61,7 +83,7 @@ from subprocess import check_call
 def pre_spawn_hook(spawner):
     user = spawner.user.name
     # 1G soft + 2G hard quota
-    check_call(["setquota", "-u", user, "524288", "2097152", "0", "0", "/host_root/"])
+#    check_call(["setquota", "-u", user, "524288", "2097152", "0", "0", "/host_root/"])
 
 c.SystemUserSpawner.pre_spawn_hook = pre_spawn_hook
 
