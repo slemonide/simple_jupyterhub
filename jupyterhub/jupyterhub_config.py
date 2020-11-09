@@ -83,7 +83,7 @@ from subprocess import check_call
 def pre_spawn_hook(spawner):
     user = spawner.user.name
     # 1G soft + 2G hard quota
-#    check_call(["setquota", "-u", user, "524288", "2097152", "0", "0", "/host_root/"])
+    check_call(["setquota", "-u", user, "524288", "2097152", "0", "0", "/host_root/"])
 
 c.SystemUserSpawner.pre_spawn_hook = pre_spawn_hook
 
