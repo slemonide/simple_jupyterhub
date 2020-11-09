@@ -37,6 +37,14 @@ To get OAUTH id and secret, follow instructions here: https://docs.github.com/en
 
 Once you have your environment set up, everything should work fine.
 
+## Setup users
+
+Copy `jupyterhub/userlist.dist` to `jupyterhub/userlist`. Delete user1, user2, user3, ... and replace by GitHub account names of people you want to give access to. Make sure to put a unique positive integer number before every user name. This number is used to setup disk quotas.
+
+If you want to delete a user, make sure not to use their number ever again for any other user in the futre. If you do, new user would have less disk space available because some of their quotas would be used by the previous deleted user.
+
+Alternatively, make sure to also delete data of deleted user (resides in `/data/jupyterhub/users/{username}`).
+
 ## Setup disk quotas
 
 To implement disk quotas, we use basic Linux filesystem disk quotas. In order for this to work, your root filesystem, and partitions where docker containers and volumes are mounted to, should be mounted with quotas on:
