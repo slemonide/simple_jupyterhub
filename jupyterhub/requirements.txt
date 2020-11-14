@@ -1,6 +1,5 @@
-dockerspawner
-#jupyterhub-dummyauthenticator
+#dockerspawner
 oauthenticator
-cdsdashboards
-cdsdashboards[user]
-jhsingle_native_proxy
+#cdsdashboards
+#cdsdashboards[user]
+#jhsingle_native_proxy

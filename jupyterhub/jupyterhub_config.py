@@ -1,4 +1,29 @@
 # launch with docker
+#from cdsdashboards.hubextension.spawners.variabledocker import VariableSystemUserSpawner
+#from dockerspawner import DockerSpawner
+
+#class DemoFormSpawner(VariableSystemUserSpawner):
+#    def _options_form_default(self):
+#        default_stack = "ideonate/containds-allr-datascience"
+#        return """
+#        <label for="stack">Select your desired stack</label>
+#        <select name="stack" size="1">
+#        <option value="ideonate/containds-allr-datascience">ideonate/containds-allr-datascience</option>
+#        <option value="jupyter/datascience-notebook">jupyter/datascience-notebook</option>
+#        <option value="phaustin/notebook">phaustin/notebook</option>
+#        </select>
+#        """.format(stack=default_stack)
+
+#    def options_from_form(self, formdata):
+#        options = {}
+#        options['stack'] = formdata['stack']
+#        container_image = ''.join(formdata['stack'])
+#        print("SPAWN: " + container_image + " IMAGE" )
+#        self.container_image = container_image
+#        return options
+
+#c.JupyterHub.spawner_class = DemoFormSpawner
+
 c.JupyterHub.spawner_class = 'cdsdashboards.hubextension.spawners.variabledocker.VariableSystemUserSpawner'
 
 # More debug info
@@ -32,6 +57,11 @@ c.JupyterHub.hub_connect_ip = 'jupyterhub_basic'
 #c.SystemUserSpawner.image = 'phaustin/notebook:step1'
 #c.SystemUserSpawner.image = 'jupyter/datascience-notebook'
 c.SystemUserSpawner.image = 'ideonate/containds-allr-datascience'
+c.VariableSystemUserSpawner.allowed_images = [
+  'ideonate/containds-allr-datascience',
+  'jupyter/datascience-notebook',
+  'phaustin/notebook:step1'
+]
 #c.SystemUserSpawner.image = 'ideonate/containds-all-basic'
 #notebook_dir = "/home/jovyan/work"
 #c.SystemUserSpawner.notebook_dir = notebook_dir
