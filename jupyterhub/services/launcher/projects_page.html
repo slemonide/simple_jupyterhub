@@ -1,0 +1,29 @@
+<html>
+  <head>
+    <title>{{ title }}</title>
+    <style>
+    </style>
+  </head>
+  <body>
+    <div class="welcome">
+      Welcome, <b>{{ escape(username) }}</b>! Have a nice day!
+    </div>
+
+    <ul class="projects">
+      {% for project in projects %}
+        <li id="{{ escape(project) }}" class="project">
+          <h2>{{ escape(project) }}</h2>
+    
+          <ul class="project_services">
+            {% for project_service in projects[project] %}
+              <li id="{{ escape(project + "_" + project_service) }}" class="project_service">
+                <a href="{{ escape("/services/launcher/" + project + "/" + project_service) }}" target="_blank">{{ escape(project_service) }}</a>
+              </li>
+            {% end %}
+          </ul>
+        </li>
+      {% end %}
+    </ul>
+  </body>
+</html>
+

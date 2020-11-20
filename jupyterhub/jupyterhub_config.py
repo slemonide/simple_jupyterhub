@@ -1,5 +1,5 @@
 # launch with docker
-#from cdsdashboards.hubextension.spawners.variabledocker import VariableSystemUserSpawner
+from cdsdashboards.hubextension.spawners.variabledocker import VariableSystemUserSpawner
 #from dockerspawner import DockerSpawner
 
 #class DemoFormSpawner(VariableSystemUserSpawner):
@@ -12,6 +12,9 @@
 #        <option value="jupyter/datascience-notebook">jupyter/datascience-notebook</option>
 #        <option value="phaustin/notebook">phaustin/notebook</option>
 #        </select>
+
+#        <p>Hello, world!</p>
+
 #        """.format(stack=default_stack)
 
 #    def options_from_form(self, formdata):
@@ -25,6 +28,30 @@
 #c.JupyterHub.spawner_class = DemoFormSpawner
 
 c.JupyterHub.spawner_class = 'cdsdashboards.hubextension.spawners.variabledocker.VariableSystemUserSpawner'
+
+# Use our launcher instead of /hub/spawn and /hub/home
+c.JupyterHub.default_url = "/services/launcher"
+
+import sys
+
+c.JupyterHub.services = [
+    {
+        'name': 'launcher',
+        'url': 'http://127.0.0.1:10101',
+        'admin': True, # allow launching user containers
+        'command': [sys.executable, './services/launcher/launcher.py'],
+    },
+    {
+        'name': 'whoami',
+        'url': 'http://127.0.0.1:10102',
+        'command': [sys.executable, './services/whoami/whoami.py'],
+    },
+    {
+        'name': 'whoami-oauth',
+        'url': 'http://127.0.0.1:10103',
+        'command': [sys.executable, './services/whoami/whoami-oauth.py'],
+    },
+]
 
 # More debug info
 c.Spawner.debug = True
