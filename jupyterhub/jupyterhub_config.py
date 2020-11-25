@@ -87,7 +87,8 @@ c.SystemUserSpawner.image = 'ideonate/containds-allr-datascience'
 c.VariableSystemUserSpawner.allowed_images = [
   'ideonate/containds-allr-datascience',
   'jupyter/datascience-notebook',
-  'phaustin/notebook:step1'
+  'phaustin/notebook:step1',
+  'jh-code-server'
 ]
 #c.SystemUserSpawner.image = 'ideonate/containds-all-basic'
 #notebook_dir = "/home/jovyan/work"

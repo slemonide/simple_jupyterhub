@@ -2,7 +2,7 @@
 oauthenticator
 #cdsdashboards
 #cdsdashboards[user]
-#jhsingle_native_proxy
+jhsingle_native_proxy
 
 # needed for launcher
 pyyaml

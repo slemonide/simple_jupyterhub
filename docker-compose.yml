@@ -4,7 +4,6 @@ services:
   jupyterhub:
     build: "jupyterhub"
     container_name: jupyterhub_basic
-    depends_on: [notebook]
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
       # Need this to create user directories
@@ -18,11 +17,6 @@ services:
       VIRTUAL_PORT: "8000"
     env_file: .env
     privileged: true # need this to be able to set quotas
-
-  notebook:
-    image: phaustin/notebook:step1
-    build: "jupyter_notebook"
-    container_name: notebook_step1
 
   # see https://linuxhandbook.com/nginx-reverse-proxy-docker/
   reverse-proxy:

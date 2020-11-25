@@ -1,7 +1,9 @@
+# Note: underscores "_" are not allowed in labels
 eoas-341:
   book: "ideonate/containds-allr-datascience"
   jupyter: "ideonate/containds-allr-datascience"
   dashboards: "ideonate/containds-allr-datascience"
+  code-server: "jh-code-server"
 eoas-541:
   book: "ideonate/containds-allr-datascience"
   jupyter: "ideonate/containds-allr-datascience"

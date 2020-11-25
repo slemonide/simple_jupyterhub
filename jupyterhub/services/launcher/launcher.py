@@ -60,6 +60,14 @@ class LauncherHandler(HubAuthenticated, RequestHandler):
         r.raise_for_status()
         user = r.json()
         is_container_launched = (container_name in user['servers'])
+        
+        # Debug
+        #self.set_header('content-type', 'application/json')
+        #self.write(json.dumps({
+        #  "projects": self.projects,
+        #  "container_image": project_service_container,
+        #  "container_name": container_name,
+        #}, indent=1, sort_keys=True))
 
         # launch_container
         if not is_container_launched:
@@ -69,10 +77,11 @@ class LauncherHandler(HubAuthenticated, RequestHandler):
               'Authorization': 'token %s' % api_token,
             },
             json = {
-              "container_image": project_service_container
+              "image": project_service_container
             }
           )
           r.raise_for_status()
+
 
         # Redirect user to their container
         self.redirect("/user/" + user_model["name"] + "/" + container_name)
