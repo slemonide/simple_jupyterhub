@@ -4,6 +4,7 @@ FROM jupyterhub/jupyterhub:master
 RUN apt-get update \
  && apt-get install -yq --no-install-recommends \
     quota \
+#    python3-dev libpq-dev \
  && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 RUN /usr/bin/python3 -m pip install --upgrade pip

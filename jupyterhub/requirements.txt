@@ -6,3 +6,7 @@ jhsingle_native_proxy
 
 # needed for launcher
 pyyaml
+
+# needed for postgresql database
+#psycopg2
+psycopg2-binary

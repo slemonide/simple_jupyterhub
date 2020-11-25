@@ -145,3 +145,9 @@ def pre_spawn_hook(spawner):
 
 c.SystemUserSpawner.pre_spawn_hook = pre_spawn_hook
 
+# Database
+c.JupyterHub.db_url = 'postgresql://postgres:{password}@{host}/{db}'.format(
+    host=os.environ['POSTGRES_HOST'],
+    password=os.environ['POSTGRES_PASSWORD'],
+    db=os.environ['POSTGRES_DB'],
+)

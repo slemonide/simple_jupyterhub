@@ -3,6 +3,9 @@ version: '3.8'
 services:
   jupyterhub:
     build: "jupyterhub"
+    depends_on:
+      - database
+    restart: always
     container_name: jupyterhub_basic
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
@@ -11,12 +14,27 @@ services:
       - "/:/host_root/:ro"
     networks:
       - jupyterhub_step1
+      - db
     environment:
       VIRTUAL_HOST: "${JUPYTERHUB_HOST}"
       LETSENCRYPT_HOST: "${JUPYTERHUB_HOST}"
       VIRTUAL_PORT: "8000"
+      POSTGRES_DB: "jupyterhub"
+      POSTGRES_HOST: database
     env_file: .env
     privileged: true # need this to be able to set quotas
+
+  database:
+    image: "postgres:9.6"
+    restart: always
+    volumes:
+      - "/data/jupyterhub/database/var/lib/postgresql/data:/var/lib/postgresql/data"
+    networks:
+      - db
+    environment:
+      POSTGRES_DB: "jupyterhub"
+      PGDATA: "/var/lib/postgresql/data"
+    env_file: .env
 
   # see https://linuxhandbook.com/nginx-reverse-proxy-docker/
   reverse-proxy:
@@ -69,3 +87,4 @@ networks:
   jupyterhub_step1:
     driver: bridge
     name: net_basic
+  db:
