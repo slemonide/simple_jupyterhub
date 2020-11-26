@@ -61,9 +61,10 @@ c.JupyterHub.services = [
     {
         'name': 'external-dashboards-test',
         'url': 'http://external_services_test_1:8000',
-        # any secret >8 characters, you'll use api_token to
-        # authenticate api requests to the hub from your service
-#        'api_token': 'super-secret',
+    },
+    {
+        'name': 'external-dashboards-three_signals',
+        'url': 'http://external_services_three_signals_1:8000',
     },
 ]
 
