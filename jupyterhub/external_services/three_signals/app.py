@@ -119,14 +119,12 @@ def moving_avg(x, w):
     z[:wrap] = 0
     return z
 
-#@app.callback(
-#    Output('indicator-graphic', 'figure'),
-#    Input('ncycles', 'value'),
-#    Input('noiselevel', 'value'),
-#    Input('smoothwin', 'value'),
-#    Input('Sigs', 'value'),
-#    Input('Smooth_on', 'value')  
-#    )    
+@app.callback(Output('indicator-graphic', 'figure'),
+    Input('ncycles', 'value'),
+    Input('noiselevel', 'value'),
+    Input('smoothwin', 'value'),
+    Input('Sigs', 'value'),
+    Input('Smooth_on', 'value'))    
 def update_graph(ncycles, noiselevel, smoothwin, Sigs, Smooth_on):
     # make a noisy sine wave on a linear trend
     # build the X-axis first, then the three time series: 

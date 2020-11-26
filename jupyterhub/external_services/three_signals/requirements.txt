@@ -1,4 +1,4 @@
-dash==1.12.0
+dash
 gunicorn
 flask
 pandas
