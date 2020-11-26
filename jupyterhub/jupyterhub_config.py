@@ -51,6 +51,20 @@ c.JupyterHub.services = [
         'url': 'http://127.0.0.1:10103',
         'command': [sys.executable, './services/whoami/whoami-oauth.py'],
     },
+    # dashboards
+    {
+        'name': 'dashboards-test',
+        'url': 'http://127.0.0.1:10104',
+        'cwd': './services/dashboards/test',
+        'command': [sys.executable, 'main.py', '--port', '10104'],
+    },
+    {
+        'name': 'external-dashboards-test',
+        'url': 'http://external_services_test_1:8000',
+        # any secret >8 characters, you'll use api_token to
+        # authenticate api requests to the hub from your service
+#        'api_token': 'super-secret',
+    },
 ]
 
 # More debug info

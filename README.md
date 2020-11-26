@@ -75,6 +75,25 @@ First command initializes user quotas, and the second one turns quotas on for th
 
 More info on disk quotas: https://linuxhint.com/disk_quota_ubuntu/
 
+## Setup database
+
+Before being able to use database, you need to create needed tables/run migrations:
+
+In one terminal, run:
+
+```bash
+docker-compose up database
+```
+
+Then, in another termial, run:
+
+```bash
+docker-compose run jupyterhub jupyterhub upgrade-db
+```
+
+Now you can stop the databse service in the first terminal.
+Database now should be functional!
+
 ## Configure backups
 
 For backups to work, you first need a second machine with a user `jupyter-backup` created on it.

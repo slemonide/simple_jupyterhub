@@ -10,3 +10,6 @@ pyyaml
 # needed for postgresql database
 #psycopg2
 psycopg2-binary
+
+# dashboards
+dash
