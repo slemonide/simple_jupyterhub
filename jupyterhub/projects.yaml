@@ -1,14 +1,70 @@
 # Note: underscores "_" are not allowed in labels
-eoas-341:
-  book: "ideonate/containds-allr-datascience"
-  jupyter: "ideonate/containds-allr-datascience"
-  dashboards: "ideonate/containds-allr-datascience"
-  code-server: "jh-code-server"
-eoas-541:
-  book: "ideonate/containds-allr-datascience"
-  jupyter: "ideonate/containds-allr-datascience"
-  dashboards: "ideonate/containds-allr-datascience"
-math-341:
-  book: "ideonate/containds-allr-datascience"
-  jupyter: "ideonate/containds-allr-datascience"
-  dashboards: "ideonate/containds-allr-datascience"
+
+# List projects (i.e. classes, or research projects)
+# Each project has services.
+# There are two types of services:
+# * external
+# * internal
+#
+# Internal services are unique for a user, and run
+# under their privilidges and use their home directory
+# For example, this can be a jupyter notebook, or an IDE
+#
+# External services are run under their own user,
+# in their own privite home directory.
+# For example, this can be a shared dashboard, a database,
+# or perhaps some cluster software where computational
+# tasks can be sent.
+#
+# Note that, in principle, internal services can be shared
+# too. For example, a user might want to quickly share
+# their work with collaborators.
+#
+# Though, for security reasons, maybe that isn't a good idea.
+# Because a rogue internal service would be able to access all
+# files of that user...
+#
+# If external: true/false flag is not set, it is assumed to be
+# false. I.e. by default services are internal. Set
+# `external: true` to make them external.
+
+projects:
+  eoas-341:
+    name: "EOAS 341"
+    services:
+      book:
+        name: "Book"
+        image: "ideonate/containds-allr-datascience"
+      jupyter:
+        name: "Jupyter"
+        image: "ideonate/containds-allr-datascience"
+      dashboards:
+        name: "Dashboards"
+        image: "ideonate/containds-allr-datascience"
+      code-server:
+        name: "VS Code Server IDE"
+        image: "jh-code-server"
+  eoas-541:
+    name: "EOAS 541"
+    services:
+      book:
+        name: "Book"
+        image: "ideonate/containds-allr-datascience"
+      jupyter:
+        name: "Jupyter"
+        image: "ideonate/containds-allr-datascience"
+      dashboards:
+        name: "Dashboards"
+        image: "ideonate/containds-allr-datascience"
+  math-341:
+    name: "MATH 341"
+    services:
+      book:
+        name: "Book"
+        image: "ideonate/containds-allr-datascience"
+      jupyter:
+        name: "Jupyter"
+        image: "ideonate/containds-allr-datascience"
+      dashboards:
+        name: "Dashboards"
+        image: "ideonate/containds-allr-datascience"

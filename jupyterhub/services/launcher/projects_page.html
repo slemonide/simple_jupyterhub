@@ -15,14 +15,16 @@ a:hover {
     </div>
 
     <ul class="projects">
-      {% for project in projects %}
+      {% for project in projects['projects'] %}
         <li id="{{ escape(project) }}" class="project">
-          <h2>{{ escape(project) }}</h2>
+          <h2>{{ escape(projects['projects'][project]['name']) }}</h2>
     
           <ul class="project_services">
-            {% for project_service in projects[project] %}
+            {% for project_service in projects['projects'][project]['services'] %}
               <li id="{{ escape(project + "_" + project_service) }}" class="project_service">
-                <a href="{{ escape("/services/launcher/" + project + "/" + project_service) }}" target="_blank">{{ escape(project_service) }}</a>
+                <a href="{{ escape("/services/launcher/" + project + "/" + project_service) }}" target="_blank">
+                  {{ escape(projects['projects'][project]['services'][project_service]['name']) }}
+                </a>
               </li>
             {% end %}
           </ul>

@@ -112,7 +112,7 @@ c.VariableSystemUserSpawner.allowed_images = [
 # tell the user containers to connect to our docker network
 c.SystemUserSpawner.network_name = 'net_basic'
 # delete containers when the stop
-c.SystemUserSpawner.remove = True
+#c.SystemUserSpawner.remove = True
 
 # Github OAuth
 from oauthenticator.github import LocalGitHubOAuthenticator

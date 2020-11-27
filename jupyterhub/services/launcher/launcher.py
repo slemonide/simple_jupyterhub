@@ -39,9 +39,13 @@ class LauncherHandler(HubAuthenticated, RequestHandler):
     def get(self, project_name, project_service_name):
         user_model = self.get_current_user()
 
+        projects = self.projects['projects']
+
         # get_project_service_container
-        if (project_name in self.projects) and (project_service_name in self.projects[project_name]):
-          project_service_container = self.projects[project_name][project_service_name]
+        if (project_name in projects) and\
+           (project_service_name in projects[project_name]['services']):
+          project_service_container = \
+            projects[project_name]['services'][project_service_name]['image']
         else:
           project_service_container = None
      
