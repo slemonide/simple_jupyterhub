@@ -44,6 +44,10 @@ projects:
       code-server:
         name: "VS Code Server IDE"
         image: "jh-code-server"
+      three-signals:
+        name: "Three Signals Dashboard"
+        image: "three-signals"
+        external: true
   eoas-541:
     name: "EOAS 541"
     services:
