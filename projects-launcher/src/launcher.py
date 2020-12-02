@@ -68,41 +68,47 @@ class LauncherHandler(HubAuthenticated, RequestHandler):
         is_container_launched = (container_name in user['servers'])
         
         # Debug
-        proxy_api_url = 'http://jupyterhub-proxy:8001/api'
-        proxy_api_token = os.environ['CONFIGPROXY_AUTH_TOKEN']
-        r = requests.get(proxy_api_url + '/routes',
-          headers = {
-            'Authorization': 'token %s' % proxy_api_token,
-          }
-        )
-        r.raise_for_status()
-        proxy = r.json()
+        #proxy_api_url = 'http://jupyterhub-proxy:8001/api'
+        #proxy_api_token = os.environ['CONFIGPROXY_AUTH_TOKEN']
+        #r = requests.get(proxy_api_url + '/routes',
+        #  headers = {
+        #    'Authorization': 'token %s' % proxy_api_token,
+        #  }
+        #)
+        #r.raise_for_status()
+        #proxy = r.json()
 
-        self.set_header('content-type', 'application/json')
-        self.write(json.dumps({
-          "projects": self.projects,
-          "container_image": project_service_container,
-          "container_name": container_name,
-          "proxy": proxy,
-        }, indent=1, sort_keys=True))
+        #self.set_header('content-type', 'application/json')
+        #self.write(json.dumps({
+        #  "projects": self.projects,
+        #  "container_image": project_service_container,
+        #  "container_name": container_name,
+        #  "proxy": proxy,
+        #}, indent=1, sort_keys=True))
         # End Debug
 
-        # launch_container
-        #if not is_container_launched:
-        #  r = requests.post(api_url + "/users/" + user_model["name"] + \
-        #                              "/servers/" + container_name,
-        #    headers = {
-        #      'Authorization': 'token %s' % api_token,
-        #    },
-        #    json = {
-        #      "image": project_service_container
-        #    }
-        #  )
-        #  r.raise_for_status()
+        service = projects[project_name]['services'][project_service_name]
 
+        is_external = ('external' in service) and service['external']
 
-        # Redirect user to their container
-        #self.redirect("/user/" + user_model["name"] + "/" + container_name)
+        if is_external:
+          self.redirect("/services/external/" + project_name + "/" + project_service_name + "/")
+        else:
+          # launch_container
+          if not is_container_launched:
+            r = requests.post(api_url + "/users/" + user_model["name"] + \
+                                        "/servers/" + container_name,
+              headers = {
+                'Authorization': 'token %s' % api_token,
+              },
+              json = {
+                "image": project_service_container
+              }
+            )
+            r.raise_for_status()
+
+          # Redirect user to their container
+          self.redirect("/user/" + user_model["name"] + "/" + container_name)
 
 def start_external_containers(projects):
   docker_client = docker.from_env()
