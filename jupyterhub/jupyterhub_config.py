@@ -15,13 +15,16 @@ c.ConfigurableHTTPProxy.should_start = False
 c.ConfigurableHTTPProxy.auth_token = os.environ['CONFIGPROXY_AUTH_TOKEN']
 c.ConfigurableHTTPProxy.api_url = 'http://jupyterhub-proxy:8001'
 
+# Allow using REST API from other containers
+# Probably a bad idea
+c.JupyterHub.api_url = 'http://0.0.0.0:8081/hub/api'
 
 c.JupyterHub.services = [
     {
         'name': 'launcher',
-        'url': 'http://jupyterhub_basic:10101',
+        'url': 'http://projects-launcher:10101',
         'admin': True, # allow launching user containers
-        'command': [sys.executable, './services/launcher/launcher.py'],
+        'api_token': os.environ['LAUNCHER_API_TOKEN']
     },
 ]
 

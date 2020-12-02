@@ -1,0 +1,5 @@
+pyyaml
+tornado>=5.1
+requests
+docker
+jupyterhub

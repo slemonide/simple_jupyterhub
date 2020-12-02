@@ -22,9 +22,6 @@ COPY packages/jhsingle-native-proxy/ /tmp/packages/jhsingle-native-proxy/
 RUN pip install /tmp/packages/jhsingle-native-proxy/
 # end development
 
-COPY services /srv/jupyterhub/services
-
-COPY projects.yaml /srv/jupyterhub/projects.yaml
 COPY userlist /srv/jupyterhub/userlist
 COPY jupyterhub_config.py /srv/jupyterhub/jupyterhub_config.py
 

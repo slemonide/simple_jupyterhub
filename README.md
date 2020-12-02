@@ -33,6 +33,8 @@ openssl rand -hex 32
 
 to generate a random token for jupyterhub's proxy, and add `CONFIGPROXY_AUTH_TOKEN=\<result\>` to `.env`.
 
+Do the same for `LAUNCHER_API_TOKEN`.
+
 ## Setup environment
 
 Copy `.env.dist` to `.env`, and fill in the blanks.
