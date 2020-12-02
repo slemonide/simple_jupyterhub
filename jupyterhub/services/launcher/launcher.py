@@ -18,6 +18,8 @@ from jupyterhub.services.auth import HubAuthenticated
 import yaml # to read config
 import requests # to make requests to Hub API
 
+import docker # to start external services containers
+
 class LauncherProjectsPageHandler(HubAuthenticated, RequestHandler):
     def initialize(self, projects):
         self.projects = projects
@@ -66,12 +68,22 @@ class LauncherHandler(HubAuthenticated, RequestHandler):
         is_container_launched = (container_name in user['servers'])
         
         # Debug
+        #r = requests.get(api_url + '/proxy',
+        #  headers = {
+        #    'Authorization': 'token %s' % api_token,
+        #  }
+        #)
+        #r.raise_for_status()
+        #proxy = r.json()
+
         #self.set_header('content-type', 'application/json')
         #self.write(json.dumps({
         #  "projects": self.projects,
         #  "container_image": project_service_container,
         #  "container_name": container_name,
+        #  "proxy": proxy,
         #}, indent=1, sort_keys=True))
+        # End Debug
 
         # launch_container
         if not is_container_launched:
@@ -90,10 +102,36 @@ class LauncherHandler(HubAuthenticated, RequestHandler):
         # Redirect user to their container
         self.redirect("/user/" + user_model["name"] + "/" + container_name)
 
+def start_external_containers(projects):
+  docker_client = docker.from_env()
+
+  for project_label in projects['projects']:
+    project = projects['projects'][project_label]
+    for service_label in project['services']:
+      service = project['services'][service_label]
+      image = service["image"]
+      
+      is_external = ("external" in service) and service["external"]
+      if is_external:
+        name = project_label + "_" + service_label
+
+        # stop & remove the container if it's already running
+        try:
+          container = docker_client.containers.get(name)
+          container.stop()
+          container.remove()
+        except docker.errors.NotFound:
+          pass # it's not running or not defined
+
+        container = docker_client.containers.run(image, detach=True, name=name)
+
 def main():
     # load configuration
     with open(r'./projects.yaml') as file:
       projects = yaml.load(file, Loader=yaml.FullLoader)
+
+    # start external containers
+    start_external_containers(projects)
 
     # start app
     app = Application(

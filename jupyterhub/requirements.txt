@@ -12,4 +12,7 @@ pyyaml
 psycopg2-binary
 
 # dashboards
-dash
+#dash
+
+# for launcher proxy of external services
+tornado-proxy-handlers

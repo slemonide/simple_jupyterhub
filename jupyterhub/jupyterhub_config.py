@@ -41,31 +41,31 @@ c.JupyterHub.services = [
         'admin': True, # allow launching user containers
         'command': [sys.executable, './services/launcher/launcher.py'],
     },
-    {
-        'name': 'whoami',
-        'url': 'http://127.0.0.1:10102',
-        'command': [sys.executable, './services/whoami/whoami.py'],
-    },
-    {
-        'name': 'whoami-oauth',
-        'url': 'http://127.0.0.1:10103',
-        'command': [sys.executable, './services/whoami/whoami-oauth.py'],
-    },
+#    {
+#        'name': 'whoami',
+#        'url': 'http://127.0.0.1:10102',
+#        'command': [sys.executable, './services/whoami/whoami.py'],
+#    },
+#    {
+#        'name': 'whoami-oauth',
+#        'url': 'http://127.0.0.1:10103',
+#        'command': [sys.executable, './services/whoami/whoami-oauth.py'],
+#    },
     # dashboards
-    {
-        'name': 'dashboards-test',
-        'url': 'http://127.0.0.1:10104',
-        'cwd': './services/dashboards/test',
-        'command': [sys.executable, 'main.py', '--port', '10104'],
-    },
-    {
-        'name': 'external-dashboards-test',
-        'url': 'http://external_services_test_1:8000',
-    },
-    {
-        'name': 'external-dashboards-three_signals',
-        'url': 'http://external_services_three_signals_1:8000',
-    },
+#    {
+#        'name': 'dashboards-test',
+#        'url': 'http://127.0.0.1:10104',
+#        'cwd': './services/dashboards/test',
+#        'command': [sys.executable, 'main.py', '--port', '10104'],
+#    },
+#    {
+#        'name': 'external-dashboards-test',
+#        'url': 'http://external_services_test_1:8000',
+#    },
+#    {
+#        'name': 'external-dashboards-three_signals',
+#        'url': 'http://external_services_three_signals_1:8000',
+#    },
 ]
 
 # More debug info
