@@ -68,39 +68,42 @@ class LauncherHandler(HubAuthenticated, RequestHandler):
         is_container_launched = (container_name in user['servers'])
         
         # Debug
-        #r = requests.get(api_url + '/proxy',
-        #  headers = {
-        #    'Authorization': 'token %s' % api_token,
-        #  }
-        #)
-        #r.raise_for_status()
-        #proxy = r.json()
+        proxy_api_url = 'http://jupyterhub-proxy:8001/api'
+        proxy_api_token = "4a766d01cb5d0256c65ad75617995665e0ce6df75e1aae634950c55fd872426f"
+        #proxy_api_token = os.environ['CONFIGPROXY_AUTH_TOKEN']
+        r = requests.get(proxy_api_url + '/routes',
+          headers = {
+            'Authorization': 'token %s' % proxy_api_token,
+          }
+        )
+        r.raise_for_status()
+        proxy = r.json()
 
-        #self.set_header('content-type', 'application/json')
-        #self.write(json.dumps({
-        #  "projects": self.projects,
-        #  "container_image": project_service_container,
-        #  "container_name": container_name,
-        #  "proxy": proxy,
-        #}, indent=1, sort_keys=True))
+        self.set_header('content-type', 'application/json')
+        self.write(json.dumps({
+          "projects": self.projects,
+          "container_image": project_service_container,
+          "container_name": container_name,
+          "proxy": proxy,
+        }, indent=1, sort_keys=True))
         # End Debug
 
         # launch_container
-        if not is_container_launched:
-          r = requests.post(api_url + "/users/" + user_model["name"] + \
-                                      "/servers/" + container_name,
-            headers = {
-              'Authorization': 'token %s' % api_token,
-            },
-            json = {
-              "image": project_service_container
-            }
-          )
-          r.raise_for_status()
+        #if not is_container_launched:
+        #  r = requests.post(api_url + "/users/" + user_model["name"] + \
+        #                              "/servers/" + container_name,
+        #    headers = {
+        #      'Authorization': 'token %s' % api_token,
+        #    },
+        #    json = {
+        #      "image": project_service_container
+        #    }
+        #  )
+        #  r.raise_for_status()
 
 
         # Redirect user to their container
-        self.redirect("/user/" + user_model["name"] + "/" + container_name)
+        #self.redirect("/user/" + user_model["name"] + "/" + container_name)
 
 def start_external_containers(projects):
   docker_client = docker.from_env()
