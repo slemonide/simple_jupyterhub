@@ -1,71 +1,28 @@
+import sys
+import os
+
 # launch with docker
 from cdsdashboards.hubextension.spawners.variabledocker import VariableSystemUserSpawner
-#from dockerspawner import DockerSpawner
-
-#class DemoFormSpawner(VariableSystemUserSpawner):
-#    def _options_form_default(self):
-#        default_stack = "ideonate/containds-allr-datascience"
-#        return """
-#        <label for="stack">Select your desired stack</label>
-#        <select name="stack" size="1">
-#        <option value="ideonate/containds-allr-datascience">ideonate/containds-allr-datascience</option>
-#        <option value="jupyter/datascience-notebook">jupyter/datascience-notebook</option>
-#        <option value="phaustin/notebook">phaustin/notebook</option>
-#        </select>
-
-#        <p>Hello, world!</p>
-
-#        """.format(stack=default_stack)
-
-#    def options_from_form(self, formdata):
-#        options = {}
-#        options['stack'] = formdata['stack']
-#        container_image = ''.join(formdata['stack'])
-#        print("SPAWN: " + container_image + " IMAGE" )
-#        self.container_image = container_image
-#        return options
-
-#c.JupyterHub.spawner_class = DemoFormSpawner
 
 c.JupyterHub.spawner_class = 'cdsdashboards.hubextension.spawners.variabledocker.VariableSystemUserSpawner'
 
 # Use our launcher instead of /hub/spawn and /hub/home
 c.JupyterHub.default_url = "/services/launcher"
 
-import sys
+c.SystemUserSpawner.remove = True
+c.JupyterHub.cleanup_servers = False
+c.ConfigurableHTTPProxy.should_start = False
+c.ConfigurableHTTPProxy.auth_token = os.environ['CONFIGPROXY_AUTH_TOKEN']
+c.ConfigurableHTTPProxy.api_url = 'http://jupyterhub-proxy:8001'
+
 
 c.JupyterHub.services = [
     {
         'name': 'launcher',
-        'url': 'http://127.0.0.1:10101',
+        'url': 'http://jupyterhub_basic:10101',
         'admin': True, # allow launching user containers
         'command': [sys.executable, './services/launcher/launcher.py'],
     },
-#    {
-#        'name': 'whoami',
-#        'url': 'http://127.0.0.1:10102',
-#        'command': [sys.executable, './services/whoami/whoami.py'],
-#    },
-#    {
-#        'name': 'whoami-oauth',
-#        'url': 'http://127.0.0.1:10103',
-#        'command': [sys.executable, './services/whoami/whoami-oauth.py'],
-#    },
-    # dashboards
-#    {
-#        'name': 'dashboards-test',
-#        'url': 'http://127.0.0.1:10104',
-#        'cwd': './services/dashboards/test',
-#        'command': [sys.executable, 'main.py', '--port', '10104'],
-#    },
-#    {
-#        'name': 'external-dashboards-test',
-#        'url': 'http://external_services_test_1:8000',
-#    },
-#    {
-#        'name': 'external-dashboards-three_signals',
-#        'url': 'http://external_services_three_signals_1:8000',
-#    },
 ]
 
 # More debug info
@@ -96,8 +53,6 @@ c.JupyterHub.hub_connect_ip = 'jupyterhub_basic'
 
 # pick a docker image. This should have the same version of jupyterhub
 # in it as our Hub.
-#c.SystemUserSpawner.image = 'phaustin/notebook:step1'
-#c.SystemUserSpawner.image = 'jupyter/datascience-notebook'
 c.SystemUserSpawner.image = 'ideonate/containds-allr-datascience'
 c.VariableSystemUserSpawner.allowed_images = [
   'ideonate/containds-allr-datascience',
@@ -105,14 +60,9 @@ c.VariableSystemUserSpawner.allowed_images = [
   'phaustin/notebook:step1',
   'jh-code-server'
 ]
-#c.SystemUserSpawner.image = 'ideonate/containds-all-basic'
-#notebook_dir = "/home/jovyan/work"
-#c.SystemUserSpawner.notebook_dir = notebook_dir
 
 # tell the user containers to connect to our docker network
 c.SystemUserSpawner.network_name = 'net_basic'
-# delete containers when the stop
-#c.SystemUserSpawner.remove = True
 
 # Github OAuth
 from oauthenticator.github import LocalGitHubOAuthenticator
@@ -120,7 +70,6 @@ c.JupyterHub.authenticator_class = LocalGitHubOAuthenticator
 c.LocalGitHubOAuthenticator.create_system_users = True
 
 # Load users from access list
-import os
 
 c.Authenticator.allowed_users = allowed = set()
 c.Authenticator.admin_users = admin = set()

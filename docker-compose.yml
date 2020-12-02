@@ -5,6 +5,7 @@ services:
     build: "jupyterhub"
     depends_on:
       - database
+      - jupyterhub-proxy
     restart: always
     container_name: jupyterhub_basic
     volumes:
@@ -16,13 +17,22 @@ services:
       - jupyterhub_step1
       - db
     environment:
-      VIRTUAL_HOST: "${JUPYTERHUB_HOST}"
-      LETSENCRYPT_HOST: "${JUPYTERHUB_HOST}"
-      VIRTUAL_PORT: "8000"
       POSTGRES_DB: "jupyterhub"
       POSTGRES_HOST: database
     env_file: .env
     privileged: true # need this to be able to set quotas
+
+  jupyterhub-proxy:
+    image: "jupyterhub/configurable-http-proxy"
+    restart: always
+    container_name: jupyterhub-proxy
+    networks:
+      - jupyterhub_step1
+    environment:
+      VIRTUAL_HOST: "${JUPYTERHUB_HOST}"
+      LETSENCRYPT_HOST: "${JUPYTERHUB_HOST}"
+      VIRTUAL_PORT: "8000"
+    env_file: .env
 
   database:
     image: "postgres:9.6"

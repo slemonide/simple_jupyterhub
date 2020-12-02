@@ -23,6 +23,16 @@ To use without backups, simply do ` docker-compose up --build`. Make sure to set
 
 These instructions assume you are running Ubuntu. They will likely not be much different for any other GNU/Linux.
 
+## Setup jupyterhub proxy token
+
+Use
+
+```bash
+openssl rand -hex 32
+```
+
+to generate a random token for jupyterhub's proxy, and add `CONFIGPROXY_AUTH_TOKEN=\<result\>` to `.env`.
+
 ## Setup environment
 
 Copy `.env.dist` to `.env`, and fill in the blanks.
