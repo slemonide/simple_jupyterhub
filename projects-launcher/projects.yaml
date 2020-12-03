@@ -48,6 +48,10 @@ projects:
         name: "Three Signals Dashboard"
         image: "three-signals"
         external: true
+      dash-hello-world:
+        name: "Hello World Dashboard"
+        image: "slemonide/sj-es-dash-hello-world"
+        external: true
   eoas-541:
     name: "EOAS 541"
     services:
