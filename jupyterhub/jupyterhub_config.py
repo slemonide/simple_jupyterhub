@@ -7,7 +7,7 @@ from cdsdashboards.hubextension.spawners.variabledocker import VariableSystemUse
 c.JupyterHub.spawner_class = 'cdsdashboards.hubextension.spawners.variabledocker.VariableSystemUserSpawner'
 
 # Use our launcher instead of /hub/spawn and /hub/home
-c.JupyterHub.default_url = "/services/launcher"
+c.JupyterHub.default_url = "/hub/login?next=%2Fservices%2Flauncher"
 
 c.SystemUserSpawner.remove = True
 c.JupyterHub.cleanup_servers = False
