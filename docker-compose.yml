@@ -29,8 +29,8 @@ services:
     networks:
       - jupyterhub_step1
     environment:
-      VIRTUAL_HOST: "${JUPYTERHUB_HOST}"
-      LETSENCRYPT_HOST: "${JUPYTERHUB_HOST}"
+      VIRTUAL_HOST: "${JUPYTERHUB_VIRTUAL_HOST}"
+      LETSENCRYPT_HOST: "${JUPYTERHUB_VIRTUAL_HOST}"
       VIRTUAL_PORT: "8000"
     env_file: .env
 

@@ -11,17 +11,6 @@ RUN /usr/bin/python3 -m pip install --upgrade pip
 COPY requirements.txt /tmp/requirements.txt
 RUN python3 -m pip install --no-cache -r /tmp/requirements.txt
 
-# development
-COPY packages/cdsdashboards/ /tmp/packages/cdsdashboards/
-RUN pip install /tmp/packages/cdsdashboards/
-
-COPY packages/dockerspawner/ /tmp/packages/dockerspawner/
-RUN pip install /tmp/packages/dockerspawner/
-
-COPY packages/jhsingle-native-proxy/ /tmp/packages/jhsingle-native-proxy/
-RUN pip install /tmp/packages/jhsingle-native-proxy/
-# end development
-
 COPY userlist /srv/jupyterhub/userlist
 COPY jupyterhub_config.py /srv/jupyterhub/jupyterhub_config.py
 

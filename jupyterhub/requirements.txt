@@ -1,11 +1,11 @@
-#dockerspawner
+dockerspawner
 oauthenticator
-#cdsdashboards
-#cdsdashboards[user]
+cdsdashboards
+cdsdashboards[user]
 jhsingle_native_proxy
 
 # needed for launcher
-pyyaml
+#pyyaml
 
 # needed for postgresql database
 #psycopg2
