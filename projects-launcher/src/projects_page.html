@@ -7,6 +7,10 @@ a:hover {
   color: lightblue;
 }
 
+li{
+  margin: 10px 0;
+}
+
     </style>
   </head>
   <body>
@@ -14,23 +18,40 @@ a:hover {
       Welcome, <b>{{ escape(username) }}</b>! Have a nice day!
     </div>
 
-    <ul class="projects">
-      {% for project in projects['projects'] %}
-        <li id="{{ escape(project) }}" class="project">
-          <h2>{{ escape(projects['projects'][project]['name']) }}</h2>
+    <div class="projects">
+      {% for project_id in projects['projects'] %}
+        {% set project = projects['projects'][project_id] %}
+        <div id="{{ escape(project_id) }}" class="project">
+          <h2>{{ escape(project['name']) }}</h2>
     
           <ul class="project_services">
-            {% for project_service in projects['projects'][project]['services'] %}
-              <li id="{{ escape(project + "_" + project_service) }}" class="project_service">
-                <a href="{{ escape("/services/launcher/" + project + "/" + project_service) }}" target="_blank">
-                  {{ escape(projects['projects'][project]['services'][project_service]['name']) }}
+            {% for project_service_id in project['services'] %}
+              {% set project_service = project['services'][project_service_id] %}
+              <li id="{{ escape(project_id + "_" + project_service_id) }}" class="project_service">
+                {% set service_url = "/services/launcher/" + project_id + "/" + project_service_id %}
+                <a href="{{ escape(service_url) }}" target="_blank">
+                  {{ escape(project_service['name']) }}
                 </a>
+
+                {% if 'internal' in project_service %}
+                  <ul>
+                    {% for internal_id in project_service['internal'] %}
+                      {% set internal = project_service['internal'][internal_id] %}
+                      <li id="{{ escape(project_id + "_" + project_service_id + "_" + internal_id) }}" class="service_internal_address">
+                        <a href="{{ escape(service_url + "?next_internal=" + url_escape(internal['url'])) }}" target="_blank">
+                          {{ escape(internal['name']) }}
+                        </a>
+                      </li>
+                    {% end %}
+                  </ul>
+                {% end %}
+
               </li>
             {% end %}
           </ul>
-        </li>
+        </div>
       {% end %}
-    </ul>
+    </div>
   </body>
 </html>
 

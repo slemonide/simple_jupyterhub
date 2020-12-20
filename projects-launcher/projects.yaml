@@ -28,51 +28,35 @@
 # false. I.e. by default services are internal. Set
 # `external: true` to make them external.
 
+# projects.<project name>.services.<service name>.internal
+# allows specifying shortcuts for urls inside that <service name>
+# for example, http://jh.com/<... service name ...>/lab for jupyter lab
+
 projects:
-  eoas-341:
-    name: "EOAS 341"
+  general:
+    name: "General"
     services:
-      book:
-        name: "Book"
-        image: "ideonate/containds-allr-datascience"
-      jupyter:
-        name: "Jupyter"
-        image: "ideonate/containds-allr-datascience"
-      dashboards:
-        name: "Dashboards"
-        image: "ideonate/containds-allr-datascience"
-      code-server:
-        name: "VS Code Server IDE"
+      computer:
+        name: "Computational Environment"
         image: "jh-code-server"
-      three-signals:
-        name: "Three Signals Dashboard"
-        image: "three-signals"
-        external: true
+        internal:
+          lab:
+            name: "Jupyter Lab"
+            url: "lab"
+          code-server:
+            name: "Code Server"
+            url: "code-server"
+          jupyter:
+            name: "Jupyter"
+            url: ""
       dash-hello-world:
         name: "Hello World Dashboard"
         image: "slemonide/sj-es-dash-hello-world"
         external: true
-  eoas-541:
-    name: "EOAS 541"
+  envr-300:
+    name: "ENVR 300"
     services:
-      book:
-        name: "Book"
-        image: "ideonate/containds-allr-datascience"
-      jupyter:
-        name: "Jupyter"
-        image: "ideonate/containds-allr-datascience"
-      dashboards:
-        name: "Dashboards"
-        image: "ideonate/containds-allr-datascience"
-  math-341:
-    name: "MATH 341"
-    services:
-      book:
-        name: "Book"
-        image: "ideonate/containds-allr-datascience"
-      jupyter:
-        name: "Jupyter"
-        image: "ideonate/containds-allr-datascience"
-      dashboards:
-        name: "Dashboards"
-        image: "ideonate/containds-allr-datascience"
+      three-signals:
+        name: "Three Signals Dashboard"
+        image: "three-signals"
+        external: true

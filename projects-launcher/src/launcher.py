@@ -107,8 +107,11 @@ class LauncherHandler(HubAuthenticated, RequestHandler):
             )
             r.raise_for_status()
 
+          # See if there any additonal instructions to where to redirect to
+          next_internal = self.get_argument('next_internal', '')
+
           # Redirect user to their container
-          self.redirect("/user/" + user_model["name"] + "/" + container_name)
+          self.redirect("/user/" + user_model["name"] + "/" + container_name + "/" + next_internal)
 
 def start_external_containers(projects):
   docker_client = docker.from_env()
