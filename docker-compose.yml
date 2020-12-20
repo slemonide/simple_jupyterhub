@@ -104,6 +104,15 @@ services:
         - "./restic/ssh/:/tmp/.ssh/:ro"
     env_file: .env
 
+  # keeps external services up to date (dashboards)
+  watchtower-external:
+    image: "containrrr/watchtower"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    command: --scope "jhub-external"
+    labels:
+      - "com.centurylinklabs.watchtower.scope=jhub-external"
+
 # force the network name to be "jupyterhub"
 # this needs to be matched in jupyterhub_config.py by:
 # c.DockerSpawner.network_name = 'jupyterhub'

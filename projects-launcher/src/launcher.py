@@ -138,9 +138,11 @@ def start_external_containers(projects):
         }
 
         #["JUPYTERHUB_SERVICE_PREFIX=/services/external/eoas-341/three-signals/"]
+        labels = {"com.centurylinklabs.watchtower.scope": "jhub-external"}
 
         container = docker_client.containers.run(image, detach=True,
-          name=name, network="net_basic", environment=environment)
+          name=name, network="net_basic", environment=environment,
+          labels=labels)
 
         # setup proxy route
         proxy_api_url = 'http://jupyterhub-proxy:8001/api'
