@@ -36,6 +36,21 @@ projects:
   general:
     name: "General"
     services:
+      wiki:
+        name: "Wiki"
+        image: "gollumorg/gollum"
+        ports:
+          - "/ 4567"
+        volumes:
+          - "wiki"
+        command:
+          - "--base-path=/services/external/general/wiki"
+          - "--allow-uploads=page"
+          - "--mathjax"
+          - "--critic-markup"
+          - "--emoji"
+#          - "--config=/etc/gollum/config.rb"
+        external: true
       computer:
         name: "Computational Environment"
         image: "jh-code-server"
@@ -51,12 +66,24 @@ projects:
             url: ""
       dash-hello-world:
         name: "Hello World Dashboard"
-        image: "slemonide/sj-es-dash-hello-world"
+        build: "https://github.com/slemonide/sj-es-dash-hello-world.git#main:/"
+        external: true
+      dashboard-minimal:
+        name: "Minimal Dashboard"
+        build: "https://github.com/slemonide/dashboard-minimal.git#main:/"
         external: true
   envr-300:
     name: "ENVR 300"
     services:
       three-signals:
         name: "Three Signals Dashboard"
-        image: "three-signals"
+        build: "https://github.com/slemonide/envr-300-3signals.git#main:/"
+        external: true
+      monaloa:
+        name: "Linear Prediction (MonaLoa) Dashboard"
+        build: "https://github.com/slemonide/envr-300-monaloa.git#main:/"
+        external: true
+      ozone:
+        name: "Ozone Vancouver Abbotsford Dashboard"
+        build: "https://github.com/slemonide/envr-300-ozone.git#main:/"
         external: true

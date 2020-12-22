@@ -109,9 +109,9 @@ services:
     image: "containrrr/watchtower"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
-    command: --scope "jhub-external"
-    labels:
-      - "com.centurylinklabs.watchtower.scope=jhub-external"
+#    command: --scope "jhub-external"
+#    labels:
+#      - "com.centurylinklabs.watchtower.scope=jhub-external"
 
 # force the network name to be "jupyterhub"
 # this needs to be matched in jupyterhub_config.py by:
