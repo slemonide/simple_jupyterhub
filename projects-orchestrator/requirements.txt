@@ -1,4 +1,4 @@
 pyyaml
 tornado>=5.1
 requests
-jupyterhub
+docker

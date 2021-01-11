@@ -77,13 +77,13 @@ projects:
     services:
       three-signals:
         name: "Three Signals Dashboard"
-        build: "https://github.com/slemonide/envr-300-3signals.git#main:/"
+        build: "https://github.com/fhmjones/envr-300-3signals.git#main:/"
         external: true
       monaloa:
         name: "Linear Prediction (MonaLoa) Dashboard"
-        build: "https://github.com/slemonide/envr-300-monaloa.git#main:/"
+        build: "https://github.com/fhmjones/envr-300-monaloa.git#main:/"
         external: true
       ozone:
         name: "Ozone Vancouver Abbotsford Dashboard"
-        build: "https://github.com/slemonide/envr-300-ozone.git#main:/"
+        build: "https://github.com/fhmjones/envr-300-ozone.git#main:/"
         external: true

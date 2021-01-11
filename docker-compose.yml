@@ -39,8 +39,22 @@ services:
     restart: always
     container_name: "projects-launcher"
     volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock"
       - "./projects.yaml:/srv/jupyterhub/projects.yaml"
+    networks:
+      - jupyterhub_step1
+    environment:
+      JUPYTERHUB_SERVICE_PREFIX: "/services/launcher/"
+      JUPYTERHUB_API_TOKEN: "${LAUNCHER_API_TOKEN}"
+      JUPYTERHUB_API_URL: "http://jupyterhub_basic:8081/hub/api"
+    env_file: .env
+  
+  projects-orchestrator:
+    build: "projects-orchestrator"
+    restart: always
+    container_name: "projects-orchestrator"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "./projects.yaml:/wd/projects.yaml"
     networks:
       - jupyterhub_step1
     environment:
