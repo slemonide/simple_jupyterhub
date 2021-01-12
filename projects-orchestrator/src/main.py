@@ -50,12 +50,15 @@ def start_external_containers(projects):
         # stop & remove the container if it's already running
         try:
           container = docker_client.containers.get(name)
-
           # if image is
 #          if isinstance(image, str):
           
           # if new image is different from the one currently running
-          if (container.image.id != image.id):
+          if (container.status == "exited"):
+            say("Container was stopped. Starting it")
+            container.remove()
+            launch_new_container = True
+          elif (container.image.id != image.id):
             say("New image detected. Restarting container")
             container.stop()
             container.remove()
@@ -64,7 +67,7 @@ def start_external_containers(projects):
             launch_new_container = False
         except docker.errors.NotFound:
           launch_new_container = True
-          say("Container wasn't running before. Starting it.")
+          say("Container didn't exist before. Creating and starting it.")
 
         if launch_new_container:
           say("Launching container")
