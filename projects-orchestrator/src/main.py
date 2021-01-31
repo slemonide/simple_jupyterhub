@@ -75,8 +75,8 @@ def start_external_containers(projects):
             name=name, network="net_basic", environment=environment,
             labels=labels, volumes=volumes, command=command)
 
-          say("Setting up proxy routes")
-          setup_proxy_routes(service, project_label, service_label, name)
+        say("Setting up proxy routes")
+        setup_proxy_routes(service, project_label, service_label, name)
 
 def setup_proxy_routes(service, project_label, service_label, name):
   if "ports" in service:

@@ -119,14 +119,40 @@ services:
         - "./restic/ssh/:/tmp/.ssh/:ro"
     env_file: .env
 
-  # keeps external services up to date (dashboards)
-  watchtower-external:
-    image: "containrrr/watchtower"
+  # Monitoring
+
+  statsd-exporter:
+    image: "prom/statsd-exporter"
+#    volumes:
+#      - "./statsd/statsd.conf:/statsd/statsd.conf"
+#    command:
+#      - "--statsd.mapping-config=/statsd/statsd.conf"
+    networks:
+      - jupyterhub_step1
+
+  prometheus:
+    image: "prom/prometheus"
     volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock"
-#    command: --scope "jhub-external"
-#    labels:
-#      - "com.centurylinklabs.watchtower.scope=jhub-external"
+#      - "/data/jupyterhub/prometheus/prometheus:/prometheus"
+      - "./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro"
+#    ports:
+#      - "127.0.0.1:8020:9090"
+    networks:
+      - jupyterhub_step1
+
+  grafana:
+    image: grafana/grafana
+    volumes:
+#      - "/data/backup-service/grafana/var/lib/grafana:/var/lib/grafana"
+      - "./grafana/dashboards:/dashboards"
+      - "./grafana/grafana.ini:/etc/grafana/grafana.ini"
+    environment:
+      - GF_USERS_DEFAULT_THEME=light
+      - GF_USERS_ALLOW_SIGN_UP=true
+    ports:
+      - "127.0.0.1:8020:3000"
+    networks:
+      - jupyterhub_step1
 
 # force the network name to be "jupyterhub"
 # this needs to be matched in jupyterhub_config.py by:

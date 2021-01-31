@@ -66,12 +66,11 @@ projects:
             url: ""
       dash-hello-world:
         name: "Hello World Dashboard"
-        build: "https://github.com/slemonide/sj-es-dash-hello-world.git#main:/"
-        external: true
-      dashboard-minimal:
-        name: "Minimal Dashboard"
         build: "https://github.com/slemonide/dashboard-minimal.git#main:/"
         external: true
+        command:
+          - "--statsd-host=statsd-exporter:9125"
+          - "--statsd-prefix=helloworld"
   envr-300:
     name: "ENVR 300"
     services:
